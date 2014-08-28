@@ -4,30 +4,20 @@ function Marker() {
 //Objeto google.maps.Marker da API
 Marker.prototype.marker = null;
 
-//Objeto google.maps.Map ao qual o marker faz referencia
+//Object google.maps.Map
 Marker.prototype.map = null;
 
-//Propriedade que guardará a imagem personalizada do marker, caso houver
+//Icon marker
 Marker.prototype.icon = null;
-
-//Propriedade que guardará uma flag, que se for true, executa o addListener
 Marker.prototype.exec_addListener = false;
-
-//Propriedade que guardará quais dos listener é para registrar
-Marker.prototype.listenerType = null;
-
-//Propriedade que seta se é para o objeto se redesenhar no mapa
 Marker.prototype.exec_refresh = false;
 
-//Tooltip do marker
+//Tooltip marker
 Marker.prototype.title = null;
 
-//Propridades da localização
+//Location
 Marker.prototype.latitude = null;
 Marker.prototype.longitude = null;
-
-//Proriedade que guardara o obejto do ws
-Marker.prototype.webservice = null;
 
 //Propriedade que guarda o refresh time do objeto
 Marker.prototype.refresh_time = 10000;
