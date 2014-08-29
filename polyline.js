@@ -49,7 +49,7 @@ Polyline.prototype.setPoints = function(points) {
     this.points = points;
 };
 
-Polyline.prototype.setPoint = function(point) {
+Polyline.prototype.addPoint = function(point) {
     if (this.points == null) {
         this.points = new Array();
     }

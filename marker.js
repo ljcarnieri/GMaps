@@ -76,12 +76,8 @@ Marker.prototype.setTitle = function(title) {
     this.title = title;
 };
 
-Marker.prototype.setIdVeiculo = function(id_veiculo) {
-    this.id_veiculo = id_veiculo;
-};
-
 Marker.prototype.setIcon = function(icon) {
-    this.icon = "assets/images/" + icon;
+    this.icon = icon;
 };
 
 Marker.prototype.setAddListener = function(listener) {
@@ -105,7 +101,6 @@ Marker.prototype.setListenerType = function(listener) {
 };
 
 Marker.prototype.stopRefresh = function() {
-    console.log("Trying to stop: " + this.id_interval);
     clearInterval(this.id_interval);
     this.id_interval = null;
 };
