@@ -14,6 +14,7 @@ Route.prototype.preserveViewport = true;
 Route.prototype.request = null;
 Route.prototype.points = null;
 Route.prototype.waypoints = null;
+Route.prototype.optimizeWaypoints = false;
 Route.prototype.travelMode = google.maps.TravelMode.DRIVING;
 Route.prototype.origin = null;
 Route.prototype.destination = null;
@@ -87,6 +88,12 @@ Route.prototype.setWaypoints = function(waypoints) {
 };
 Route.prototype.getWaypoints = function() {
     return this.waypoints;
+};
+Route.prototype.setOptimizeWaypoints = function(optimizeWaypoints) {
+    this.optimizeWaypoints = optimizeWaypoints;
+};
+Route.prototype.getOptimizeWaypoints = function() {
+    return this.optimizeWaypoints;
 };
 Route.prototype.setTravelMode = function(travelMode) {
     this.travelMode = travelMode;
@@ -196,7 +203,7 @@ Route.prototype.init = function() {
             });
         }
         this.request.waypoints = pontos;
-        this.request.optimizeWaypoints = false;
+        this.request.optimizeWaypoints = this.optimizeWaypoints;
     }
     var rota = this;
     var render = true;

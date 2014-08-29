@@ -45,11 +45,11 @@ Map.prototype.setMapTypeId = function (mapTypeId) {
 Map.prototype.getMapTypeId = function () {
     return this.mapTypeId;
 };
-Map.prototype.setStreetViewControl = function (streetViewControl) {
+Map.prototype.setHasStreetViewControl = function (streetViewControl) {
     this.streetViewControl = streetViewControl;
 };
 
-Map.prototype.getStreetViewControl = function () {
+Map.prototype.getHasStreetViewControl = function () {
     return this.streetViewControl;
 };
 
@@ -123,6 +123,14 @@ Map.prototype.init = function () {
 
 Map.prototype.removePolyline = function (index) {
     this.polylines[index].clear();
+};
+
+Map.prototype.removeRoute = function (index) {
+    this.routes[index].clear();
+};
+
+Map.prototype.removeMarker = function (index) {
+    this.markers[index].clear();
 };
 
 Map.prototype.changeZoom = function (zoom) {
