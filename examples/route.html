@@ -6,7 +6,6 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDkD3E5clwwpXs8VasdzW9iHw8ojeY_88&sensor=false"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="../maps.js"></script>
-    <script src="../marker.js"></script>
     <script src="../route.js"></script>
     <title>Teste de Mapa</title>
     <script>
@@ -15,16 +14,13 @@
             map.setDiv("map");
             map.setCenter(-22.903664, -47.057431);
             map.setMapTypeId(map.ROADMAP);
-            map.setStreetViewControl(true);
             map.init();
 
             //Adiciona uma rota
             var route = new Route();
             route.setMap(map);
-            route.setPoints([
-                {latitude: -22.903664, longitude: -47.057431},
-                {latitude: -23.085702, longitude: -46.979712}
-            ]);
+            route.setOrigin({latitude: -22.903664, longitude: -47.057431});
+            route.setDestination({latitude: -23.085702, longitude: -46.979712});
             route.init();
         });
     </script>

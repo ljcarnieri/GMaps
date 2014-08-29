@@ -12,12 +12,11 @@ Route.prototype.suppressInfoWindows = true;
 Route.prototype.suppressMarkers = false;
 Route.prototype.preserveViewport = true;
 Route.prototype.request = null;
-Route.prototype.points = null;
+Route.prototype.origin = null;
+Route.prototype.destination = null;
 Route.prototype.waypoints = null;
 Route.prototype.optimizeWaypoints = false;
 Route.prototype.travelMode = google.maps.TravelMode.DRIVING;
-Route.prototype.origin = null;
-Route.prototype.destination = null;
 Route.prototype.request_response = null; //Objeto DirectionResult do Google Maps API
 Route.prototype.total_distance = 0;
 Route.prototype.total_duration = 0;
@@ -35,28 +34,22 @@ Route.prototype.setOptions = function(options) {
 Route.prototype.getOptions = function() {
     return this.options;
 };
-Route.prototype.getDirectionsService = function() {
-    return this.directions_service;
-};
-Route.prototype.getDirectionsRenderer = function() {
-    return this.route;
-};
-Route.prototype.setWeight = function(weight) {
+Route.prototype.setLineWeight = function(weight) {
     this.weight = weight;
 };
-Route.prototype.getWeight = function() {
+Route.prototype.getLineWeight = function() {
     return this.weight;
 };
-Route.prototype.setOpacity = function(opacity) {
+Route.prototype.setLineOpacity = function(opacity) {
     this.opacity = opacity;
 };
-Route.prototype.getOpacity = function() {
+Route.prototype.getLineOpacity = function() {
     return this.opacity;
 };
-Route.prototype.setColor = function(color) {
+Route.prototype.setLineColor = function(color) {
     this.color = color;
 };
-Route.prototype.getColor = function() {
+Route.prototype.getLineColor = function() {
     return this.color;
 };
 Route.prototype.setSuppressInfoWindows = function(suppressInfoWindows) {
@@ -71,17 +64,11 @@ Route.prototype.setSuppressMarkers = function(suppressMarkers) {
 Route.prototype.getSuppressMarkers = function() {
     return this.suppressMarkers;
 };
-Route.prototype.setPreserveViewport = function(preserveViewport) {
-    this.preserveViewport = preserveViewport;
+Route.prototype.setPreserveZoom = function(preserveZoom) {
+    this.preserveViewport = preserveZoom;
 };
-Route.prototype.getPreserveViewport = function() {
+Route.prototype.getPreserveZoom = function() {
     return this.preserveViewport;
-};
-Route.prototype.setRequest = function(request) {
-    this.request = request;
-};
-Route.prototype.getRequest = function() {
-    return this.request;
 };
 Route.prototype.setWaypoints = function(waypoints) {
     this.waypoints = waypoints;
@@ -113,15 +100,6 @@ Route.prototype.setDestination = function(destination) {
 Route.prototype.getDestination = function() {
     return this.destination;
 };
-Route.prototype.setPoints = function(points) {
-    this.points = points;
-};
-Route.prototype.getPoints = function() {
-    return this.points;
-};
-Route.prototype.getResponse = function() {
-    return this.request_response;
-};
 
 Route.prototype.getTotalDistance = function() {
     return this.total_distance;
@@ -139,11 +117,11 @@ Route.prototype.getLegs = function() {
     return this.legs;
 };
 
-
 //Faz o init da renderização da rota
 Route.prototype.init = function() {
     //Valida algumas coisas antes de iniciar o processo
-    if (this.points == null || this.points == undefined) {
+    if (this.origin == null || this.destination == null ||
+        this.origin == undefined || this.destination == undefined) {
         console.error("PONTOS ESTÃO NULOS");
         return null;
     }
@@ -153,13 +131,13 @@ Route.prototype.init = function() {
         return null;
     }
 
-    //Cria o direction service
+    //Create the direction service
     this.directions_service = new google.maps.DirectionsService();
 
-    //Cria o direction render
+    //Create the direction render
     this.route = new google.maps.DirectionsRenderer();
 
-    //Seta algumas opções
+    //Set some options
     this.options = {
         preserveViewport: this.preserveViewport,
         suppressInfoWindows: this.suppressInfoWindows,
@@ -171,19 +149,26 @@ Route.prototype.init = function() {
         }
     };
 
-    //Seta as opções
+    //Set the options
     this.route.setOptions(this.options);
 
-    //E seta ele no mapa
+    //Set the route on map
     this.route.setMap(this.map.getMap());
+    debugger;
+    if (this.origin instanceof Object) {
+        //If the object isn't LatLng, create this object
+        this.origin = new google.maps.LatLng(
+            this.origin.latitude,
+            this.origin.longitude
+        );
+    }
 
-    var ponto = this.points.shift();
-    this.origin = new google.maps.LatLng(ponto.latitude, ponto.longitude);
-
-    //Guarda o ponto final da rota
-    ponto = this.points.pop();
-    if (ponto != undefined) {
-        this.destination = new google.maps.LatLng(ponto.latitude, ponto.longitude);
+    if (this.destination instanceof Object) {
+        //If the object isn't LatLng, create this object
+        this.destination = new google.maps.LatLng(
+            this.destination.latitude,
+            this.destination.longitude
+        );
     }
 
     //Cria uma variavel que guardará as opções da requisição
@@ -194,17 +179,18 @@ Route.prototype.init = function() {
     };
 
     //Se o array ainda tiver elementos, setam eles como waypoints
-    if (this.points.length > 0) {
-        var pontos = new Array();
+    if (this.waypoints != null && this.waypoints.length > 0) {
+        var way = new Array();
         for (var i in this.points) {
-            pontos.push({
-                location: new google.maps.LatLng(this.points[i].latitude, this.points[i].longitude),
+            way.push({
+                location: new google.maps.LatLng(this.waypoints[i].latitude, this.waypoints[i].longitude),
                 stopover: true
             });
         }
-        this.request.waypoints = pontos;
+        this.request.waypoints = way;
         this.request.optimizeWaypoints = this.optimizeWaypoints;
     }
+
     var rota = this;
     var render = true;
     this.directions_service.route(this.request, function(response, status) {
