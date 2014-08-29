@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDkD3E5clwwpXs8VasdzW9iHw8ojeY_88&sensor=false"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="../maps.js"></script>
+    <script src="../marker.js"></script>
+    <script src="../route.js"></script>
+    <title>Teste de Mapa</title>
+    <script>
+        $(document).ready(function () {
+            var map = new Map();
+            map.setDiv("map");
+            map.setCenter(-22.903664, -47.057431);
+            map.setMapTypeId(map.ROADMAP);
+            map.setStreetViewControl(true);
+            map.init();
+
+            //Adiciona um marker
+            //var marker = new Marker();
+            //marker.setLatitude(-22.903664);
+            //marker.setLongitude(-47.057431);
+            //marker.setMap(map);
+            //marker.setTitle("Meu Marker");
+            //marker.init();
+
+            //Adiciona uma rota
+            var route = new Route();
+            route.setMap(map);
+            route.setPoints([
+                {latitude: -22.903664, longitude: -47.057431},
+                {latitude: -23.085702, longitude: -46.979712}
+            ]);
+            route.init();
+        });
+    </script>
+</head>
+<body>
+<div id="map" style="width: 500px; height: 600px"></div>
+</body>
+</html>
