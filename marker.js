@@ -9,8 +9,10 @@ Marker.prototype.map = null;
 
 //Icon marker
 Marker.prototype.icon = null;
-Marker.prototype.exec_addListener = false;
 Marker.prototype.exec_refresh = false;
+
+//Função que executa no click do marker
+Marker.prototype.click_listener = null;
 
 //Tooltip marker
 Marker.prototype.title = null;
@@ -80,8 +82,8 @@ Marker.prototype.setIcon = function(icon) {
     this.icon = icon;
 };
 
-Marker.prototype.setAddListener = function(listener) {
-    this.exec_addListener = listener;
+Marker.prototype.clickListener = function(listener) {
+    this.click_listener = listener;
 };
 
 Marker.prototype.setRefresh = function(refresh) {
@@ -109,8 +111,7 @@ Marker.prototype.startRefresh = function() {
     this.refresh();
 };
 
-Marker.prototype.destroyYourSelf = function() {
-    console.log("Jesus, i'm dying!");
+Marker.prototype.kill = function() {
     this.stopRefresh();
     this.marker.setMap(null);
 };
@@ -140,6 +141,11 @@ Marker.prototype.init = function() {
     if (this.exec_refresh) {
         this.refresh();
     }
+
+	//Se a propriedade click_listener for uma function, é pra fazer algo com o click do marker
+	if (typeof this.click_listener == "function") {
+		google.maps.event.addListener(this.marker, 'click', this.click_listener);
+	}
 };
 
 Marker.prototype.hide = function() {

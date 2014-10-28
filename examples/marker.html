@@ -15,7 +15,6 @@
             map.setDiv("map");
             map.setCenter(-22.903664, -47.057431);
             map.setMapTypeId(map.ROADMAP);
-            map.setStreetViewControl(true);
             map.init();
 
             //Adiciona um marker
@@ -24,6 +23,9 @@
             marker.setLongitude(-47.057431);
             marker.setMap(map);
             marker.setTitle("Meu Marker");
+			marker.clickListener(function() {
+				window.alert("Click do marker");
+			});
             marker.init();
         });
     </script>
